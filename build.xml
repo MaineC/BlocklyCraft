@@ -1,4 +1,4 @@
-<project name="scriptcraft" default="package" basedir=".">
+<project xmlns:ivy="antlib:org.apache.ivy.ant" name="scriptcraft" default="package" basedir=".">
   <property file="build.properties"/>
   <description>Builds the scriptcraft.jar file - a plugin for bukkit</description>
   <!-- ScriptCraft works with:
@@ -13,7 +13,14 @@
 
   <!-- compiles against these libraries -->
   <property name="lib.canary" location="lib/canarymod-1.8.0.jar"/>
+  <!-- this is in a maven repo by now - see https://www.spigotmc.org/wiki/spigot-maven/ TODO -->
   <property name="lib.bukkit" location="lib/spigot-1.11.2.jar"/>
+  <property name="lib.asm" location="lib/asm-7.3.1.jar"/>
+  <property name="lib.asm-analysis" location="lib/asm-analysis-7.3.1.jar"/>
+  <property name="lib.asm-tree" location="lib/asm-tree-7.3.1.jar"/>
+  <property name="lib.asm-util" location="lib/asm-util-7.3.1.jar"/>
+  <property name="lib.asm-commons" location="lib/asm-commons-7.3.1.jar"/>
+  <property name="lib.nashorn-core" location="lib/nashorn-core-15.4.jar"/>
 
   <property name="build" location="target/classes"/>
   <property name="dist" location="target/" />
@@ -29,15 +36,24 @@
     <sequential>
       <java classname="jscript" failonerror="true" fork="true" output="@{out}"  error="@{err}">
 	<classpath>
-          <pathelement path="${build}"/>      
+          <pathelement path="${build}"/>
 	  <pathelement path="${lib.canary}"/>
 	  <pathelement path="${lib.bukkit}"/>
+	  <pathelement path="${lib.asm}"/>
+	  <pathelement path="${lib.asm-tree}"/>
+	  <pathelement path="${lib.asm-analysis}"/>
+	  <pathelement path="${lib.asm-util}"/>
+	  <pathelement path="${lib.asm-commons}"/>
+	  <pathelement path="${lib.nashorn-core}"/>
 	</classpath>
       <arg value="@{src}"/>
       <js-args/>
       </java>
     </sequential>
   </macrodef>
+
+  <target name="resolve" description="resolve deps"><ivy:resolve /></target>
+  <target name="retrieve" description="retrieve deps"><ivy:retrieve /></target>
 
   <target name="init">
     <property file="build.local.properties"/>
@@ -52,27 +68,31 @@
     <available file="${dist}/js/modules/underscore.js" property="underscore.present"/>
   </target>
 
-  <target name="test" depends="package" description="Perform unit tests">
-    
-  </target>
+  <target name="test" depends="package" description="Perform unit tests"> </target>
 
 
   <target name="compile-plugins" depends="init" description="compile canary plugin source">
-    <javac includeantruntime="false" 
-           source="1.6" 
-           target="1.6" 
-           destdir="${build}" 
+    <javac includeantruntime="false"
+           source="1.7"
+           target="1.7"
+           destdir="${build}"
            debug="true">
       <src path="${src.common}"/>
       <src path="${src.canary}"/>
       <src path="${src.bukkit}"/>
       <classpath>
 	<pathelement path="${lib.canary}" />
-	<pathelement path="${lib.bukkit}" />
+        <pathelement path="${lib.asm}"/>
+	<pathelement path="${lib.asm-tree}"/>
+	<pathelement path="${lib.asm-analysis}"/>
+	<pathelement path="${lib.asm-util}"/>
+	<pathelement path="${lib.asm-commons}"/>
+	<pathelement path="${lib.nashorn-core}"/>
+        <pathelement path="${lib.bukkit}" />
       </classpath>
     </javac>
   </target>
-    
+
   <target name="gendocs" depends="construct-ypgpm, construct-api-ref" description="Generate API documentation">
   </target>
 
@@ -80,6 +100,13 @@
     <javac includeantruntime="false" srcdir="src/docs/java" destdir="${build}">
       <classpath>
 	<pathelement path="${lib.canary}"/>
+        <pathelement path="${lib.asm}"/>
+	<pathelement path="${lib.asm-tree}"/>
+	<pathelement path="${lib.asm-analysis}"/>
+	<pathelement path="${lib.asm-util}"/>
+	<pathelement path="${lib.asm-commons}"/>
+	<pathelement path="${lib.nashorn-core}"/>
+        <pathelement path="${lib.bukkit}" />
       </classpath>
     </javac>
   </target>

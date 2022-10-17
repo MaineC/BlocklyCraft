@@ -48,7 +48,7 @@ public class ScriptCraftPlugin extends Plugin implements PluginListener, Command
     public boolean enable()
     {
         try{
-            ScriptEngineManager factory = new ScriptEngineManager();
+            ScriptEngineManager factory = new ScriptEngineManager(null);
             this.engine = factory.getEngineByName("JavaScript");
             if (this.engine == null){
                 this.getLogman().error(NO_JAVASCRIPT_MESSAGE);

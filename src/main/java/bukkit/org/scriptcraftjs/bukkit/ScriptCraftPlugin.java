@@ -32,7 +32,7 @@ public class ScriptCraftPlugin extends JavaPlugin implements Listener
         ClassLoader previousClassLoader = currentThread.getContextClassLoader();
         currentThread.setContextClassLoader(getClassLoader());
         try {
-            ScriptEngineManager factory = new ScriptEngineManager();
+            ScriptEngineManager factory = new ScriptEngineManager(null);
             this.engine = factory.getEngineByName("JavaScript");
 			if (this.engine == null) {
 				this.getLogger().severe(NO_JAVASCRIPT_MESSAGE);

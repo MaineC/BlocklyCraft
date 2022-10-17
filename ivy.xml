@@ -1,0 +1,9 @@
+<ivy-module version="2.0">
+    <info organisation="de.isabel-drost" module="scriptcraft"/>
+    <dependencies>
+        <dependency org="org.openjdk.nashorn" name="nashorn-core" rev="15.4"/>
+    </dependencies>
+</ivy-module>
+
+
+
